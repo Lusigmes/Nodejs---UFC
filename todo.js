@@ -116,7 +116,7 @@ app.put("/todos/:id",verificarConta,  (request,response)=>{
     return response.status(200).json(todoUpdate);
 });
 
-//ATUALIZAR TODO {FEITO} []
+//ATUALIZAR TODO {DONE} []
 app.patch("/todo/:id/done",verificarConta,  (request,response)=>{
     const {user}  = request;
     const {id} = request.params;
@@ -133,7 +133,7 @@ app.patch("/todo/:id/done",verificarConta,  (request,response)=>{
     return response.status(200).json(todo);
 });
 
-//EXCLUIR TODO []
+//EXCLUIR TODO [X]
 app.delete("/todos/:id",verificarConta, (request,response)=>{
     const {user} = request;
     const {id} = request.params;
