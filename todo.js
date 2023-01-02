@@ -87,6 +87,7 @@ app.get("/todos", verificarConta, (request,response)=>{
 
     return response.json(user.todos);
 });
+
 //LISTAR USERS [X]
 app.get("/users", verificarConta, (request,response)=>{
     const {user} = request;
@@ -94,26 +95,28 @@ app.get("/users", verificarConta, (request,response)=>{
     return response.json(users);
 });
 
-//ATUALIZAR TODO [x]
+//ATUALIZAR TODO []
 app.put("/todos/:id",verificarConta,  (request,response)=>{
     const {user} = request;
     const {titulo,deadline} = request.body;
-    const {id} = request.params;
-
-    const todo = user.todos.find(todo => todo.id === id);
-    if(!todo){
+    const {id: todoId} = request.params;
+    
+    const todoI = user.todos.findIndex(todo => todo.id === todoId);
+    if(todoI === -1){
         return response.status(404).json({
-            error: "ToDo NÃO ENCONTRADO!"
+            error: "Todo NÂO ENCONTADO!"
         });
     }
 
-    todo.titulo = titulo;
-    todo.deadline = new Date(deadline);
+    const todoUpdate = user.todos[todoI];
 
-    return response.status(200).json(todo);
+    titulo ? todoUpdate.titulo = titulo : false;
+    deadline ? todoUpdate.deadline = new Date(deadline) : false;
+
+    return response.status(200).json(todoUpdate);
 });
 
-//ATUALIZAR TODO {FEITO} [x]
+//ATUALIZAR TODO {FEITO} []
 app.patch("/todo/:id/done",verificarConta,  (request,response)=>{
     const {user}  = request;
     const {id} = request.params;
@@ -141,12 +144,11 @@ app.delete("/todos/:id",verificarConta, (request,response)=>{
             error: "Todo NÃO ENCONTRADO!"
         });
     }
+    
     user.todos.splice(todoI,1);
 
-    return response.status(204).json();
+    return response.status(204).json(user.todos);
 });
-
-
 
 app.listen(3333);
 module.exports = app;
